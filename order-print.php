@@ -200,6 +200,7 @@ endforeach;
 			$totalPrice=0;
 			foreach($productFields as $productField):?>
             <?php if( $productField->field_type=='price' || $productField->field_type=='dropdown' ):?>
+			<?php if(fieldValue($orderFields,$productField->id)!=''):?>
             <tr class="item">
                 <td>
                     <?php echo $productField->field_label;?> 
@@ -228,6 +229,7 @@ endforeach;
                 </td>
             </tr>
             <?php endif;?>
+            <?php endif;?>
             <?php endforeach;?>
 			<tr class="item">
 					<td>
@@ -237,11 +239,19 @@ endforeach;
 						<strong>x <?php echo fieldValue($orderDetail,'order_quantity',1);?></strong>
 					</td>
 				</tr>
+				<tr class="item">
+					<td>
+						<strong>Discount</strong>
+					</td>
+					<td>
+						<strong>- &#8377; <?php echo number_format(fieldValue($orderDetail,'order_discount',0));?></strong>
+					</td>
+				</tr>
 			  <tr class="item">
 					<td>
 						<strong>Total</strong>
 					</td>
-					<td>
+					<td style="color:green;">
 						<strong>&#8377; <?php echo number_format($totalPrice*fieldValue($orderDetail,'order_quantity',1));?></strong>
 					</td>
 				</tr>
@@ -257,7 +267,7 @@ endforeach;
 					<td>
 						Balance Amount
 					</td>
-					<td>
+					<td style="color:red;">
 						&#8377; <?php echo number_format(fieldValue($orderDetail,'order_amount_balance',1));?>
 					</td>
 				</tr>
@@ -278,12 +288,14 @@ endforeach;
 								$totalPrice=0;
 								foreach($productFields as $productField):?>
 								<?php if( $productField->field_type!='price' && $productField->field_type!='dropdown' ):?>
+								<?php if(fieldValue($orderFields,$productField->id)!=''):?>
 								<tr class="item">
 									<td class="text-right">
 										<?php echo $productField->field_label;?> 
 										( <i><?php echo fieldValue($orderFields,$productField->id);?></i> )
 									</td>
 								</tr>
+								<?php endif;?>
 								<?php endif;?>
 								<?php endforeach;?>
 							</table>

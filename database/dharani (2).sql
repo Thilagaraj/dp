@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 01, 2017 at 06:37 PM
+-- Generation Time: Jul 04, 2017 at 07:37 PM
 -- Server version: 10.1.21-MariaDB
 -- PHP Version: 5.6.30
 
@@ -52,7 +52,8 @@ INSERT INTO `dp_fields` (`id`, `field_name`, `field_label`, `field_type`, `field
 (8, 'Sample Text', 'Sample Text', 'text', '[]', 'Sample Text', 1, '2017-07-01 13:39:24', 0, '0000-00-00'),
 (9, 'Sample Number', 'Sample Number', 'number', '[]', 'Sample Number', 1, '2017-07-01 13:42:12', 0, '0000-00-00'),
 (10, 'Sample Textarea', 'Sample Textarea', 'textarea', '[]', 'Sample Textarea', 1, '2017-07-01 13:42:34', 0, '0000-00-00'),
-(11, 'Sample Price', 'Sample Price', 'price', '[]', 'Sample Price', 1, '2017-07-01 13:53:29', 0, '0000-00-00');
+(11, 'Sample Price', 'Sample Price', 'price', '[]', 'Sample Price', 1, '2017-07-01 13:53:29', 0, '0000-00-00'),
+(12, 'Dropdown Without Price', 'Dropdown Without Price', 'dropdownnp', '[{\"option_name\":\"Test1\",\"option_value\":\"Test1\",\"option_price\":\"\"},{\"option_name\":\"Test2\",\"option_value\":\"Test2\",\"option_price\":\"\"}]', 'Dropdown Without Price', 1, '2017-07-02 04:46:17', 0, '0000-00-00');
 
 -- --------------------------------------------------------
 
@@ -74,6 +75,7 @@ CREATE TABLE `dp_orders` (
   `order_actual_delivered_date` date NOT NULL,
   `order_additional_info` text NOT NULL,
   `order_quantity` int(11) NOT NULL,
+  `order_discount` int(11) NOT NULL DEFAULT '0',
   `order_amount` int(11) NOT NULL,
   `order_amount_paid` double NOT NULL,
   `order_amount_balance` double NOT NULL,
@@ -88,10 +90,11 @@ CREATE TABLE `dp_orders` (
 -- Dumping data for table `dp_orders`
 --
 
-INSERT INTO `dp_orders` (`id`, `order_name`, `order_phone`, `order_email`, `order_address`, `order_product`, `order_product_information`, `order_custom_fields`, `order_date`, `order_delivery_date`, `order_actual_delivered_date`, `order_additional_info`, `order_quantity`, `order_amount`, `order_amount_paid`, `order_amount_balance`, `order_location`, `order_status`, `created_date`, `modified_date`, `is_deleted`) VALUES
-(1, 'Thilagaraj', '9698120906', 'tk.thilagaraj@gmail.com', 'Test Address', '1', 'Tests Product info', '', '2017-06-18', '2017-06-08', '0000-00-00', 'Test Add Info', 123, 0, 0, 0, 'Sathyamanagalam', 'In Progress', '2017-06-18 13:40:50', '0000-00-00 00:00:00', 1),
-(2, 'Thilagaraj', '9698120906', 'tk.thilagaraj@gmail.com', 'Test Address', '4', 'Tests Product info', '[{\"field_id\":5,\"field_value\":\"90GSM - 2MM Thickness\"},{\"field_id\":6,\"field_value\":\"Double Sided\"},{\"field_id\":7,\"field_value\":\"Single Color\"},{\"field_id\":8,\"field_value\":\"23\"},{\"field_id\":9,\"field_value\":\"12\"},{\"field_id\":11,\"field_value\":\"23\"}]', '2017-06-01', '2017-06-18', '0000-00-00', 'Test Add Infos', 123, 60639, 60000, 639, 'Sathyamanagalam', 'In Progress', '2017-06-18 13:54:22', '2017-07-01 00:00:00', 0),
-(3, 'Thilagaraj', '9698120906', 'tk.thilagaraj@gmail.com', 'Test Address', '2', 'Tests Product info', '', '2017-06-18', '2017-06-08', '0000-00-00', 'Test Add Info', 123, 123, 0, 0, 'Sathyamanagalam', 'In Progress', '2017-06-18 13:55:44', '2017-07-01 00:00:00', 1);
+INSERT INTO `dp_orders` (`id`, `order_name`, `order_phone`, `order_email`, `order_address`, `order_product`, `order_product_information`, `order_custom_fields`, `order_date`, `order_delivery_date`, `order_actual_delivered_date`, `order_additional_info`, `order_quantity`, `order_discount`, `order_amount`, `order_amount_paid`, `order_amount_balance`, `order_location`, `order_status`, `created_date`, `modified_date`, `is_deleted`) VALUES
+(1, 'Thilagaraj', '9698120906', 'tk.thilagaraj@gmail.com', 'Test Address', '1', 'Tests Product info', '', '2017-06-18', '2017-06-08', '0000-00-00', 'Test Add Info', 123, 0, 0, 0, 0, 'Sathyamanagalam', 'In Progress', '2017-06-18 13:40:50', '0000-00-00 00:00:00', 1),
+(2, 'Thilagaraj', '9698120906', 'tk.thilagaraj@gmail.com', 'Test Address', '4', 'Tests Product info', '[{\"field_id\":5,\"field_value\":\"90GSM - 2MM Thickness\"},{\"field_id\":6,\"field_value\":\"Double Sided\"},{\"field_id\":7,\"field_value\":\"Single Color\"},{\"field_id\":8,\"field_value\":\"23\"},{\"field_id\":9,\"field_value\":\"12\"},{\"field_id\":11,\"field_value\":\"23\"},{\"field_id\":12,\"field_value\":\"Test2\"}]', '2017-06-01', '2017-06-18', '0000-00-00', 'Test Add Infos', 12, 0, 5916, 5000, 916, 'Sathyamanagalam', 'In Progress', '2017-06-18 13:54:22', '2017-07-02 00:00:00', 0),
+(3, 'Thilagaraj', '9698120906', 'tk.thilagaraj@gmail.com', 'Test Address', '2', 'Tests Product info', '', '2017-06-18', '2017-06-08', '0000-00-00', 'Test Add Info', 123, 0, 123, 0, 0, 'Sathyamanagalam', 'In Progress', '2017-06-18 13:55:44', '2017-07-01 00:00:00', 1),
+(4, 'Savitha R', '9976495782', 'rammesai@gmail.com', 'Sathyamangalam, Post sathyamangalam, Sathy, Erode(T)-636455', '4', '', '[{\"field_id\":5,\"field_value\":\"100GSM - 3MM Thickness\"},{\"field_id\":6,\"field_value\":\"Single Sided\"},{\"field_id\":7,\"field_value\":\"Single Color\"},{\"field_id\":8,\"field_value\":\"With Lamination\"},{\"field_id\":9,\"field_value\":\"234\"},{\"field_id\":11,\"field_value\":\"45\"},{\"field_id\":12,\"field_value\":\"Test2\"}]', '2017-07-02', '2017-07-13', '0000-00-00', 'Please bundle the pack to deliver via post', 3, 0, 1485, 0, 1485, 'Sathyamanagalam', 'In Progress', '2017-07-02 05:12:59', '2017-07-02 00:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -119,7 +122,7 @@ INSERT INTO `dp_products` (`id`, `product_name`, `product_description`, `product
 (1, 'Visiting Cards', 'Visiting Cards', 0, '7,6,5', 1, '2017-06-18 15:49:49', '2017-07-01', 0),
 (2, 'Calendars', 'Calendars', 0, '8,6,5', 1, '2017-06-18 15:50:19', '2017-07-01', 0),
 (3, 'ewwer', 'werwe', 0, '4', 1, '2017-07-01 11:26:10', '2017-07-01', 1),
-(4, 'Inivitation', 'Inivitation Cards', 0, '11,9,8,7,6,5', 1, '2017-07-01 11:41:49', '2017-07-01', 0);
+(4, 'Inivitation', 'Inivitation Cards', 0, '12,11,9,8,7,6,5', 1, '2017-07-01 11:41:49', '2017-07-02', 0);
 
 -- --------------------------------------------------------
 
@@ -181,12 +184,12 @@ ALTER TABLE `dp_users`
 -- AUTO_INCREMENT for table `dp_fields`
 --
 ALTER TABLE `dp_fields`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT for table `dp_orders`
 --
 ALTER TABLE `dp_orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `dp_products`
 --

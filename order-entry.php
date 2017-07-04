@@ -102,6 +102,18 @@
 						</div>
 						<div class="col-md-6">		
 						  <div class="form-group">
+							  <label class="col-lg-12 col-sm-3 control-label">Discount Amount
+								<span class="required">*</span>
+							  </label>
+							  <div class="col-lg-12 col-sm-9">                    
+								 &#8377; <input type="number" class="form-control order_discount" value="<?php echo fieldValue($orderDetail,'order_discount',0);?>" name="order_discount" placeholder="&#8377; 500" required="" style="width:90%;display:initial;" />                 
+							 </div>
+							</div>
+					</div>
+                </div>
+				 <div class="row">
+				 <div class="col-md-4">		
+						  <div class="form-group">
 							  <label class="col-lg-12 col-sm-3 control-label">Total Amount
 								<span class="required">*</span>
 							  </label>
@@ -110,9 +122,7 @@
 							 </div>
 							</div>
 					</div>
-                </div>
-				 <div class="row">
-					<div class="col-md-6">
+					<div class="col-md-4">
 						   <div class="form-group">
 							  <label class="col-lg-12 col-sm-3 control-label">Amount Paid
 								<span class="required">*</span>
@@ -122,7 +132,7 @@
 							 </div>
 							</div>
 						</div>
-						<div class="col-md-6">		
+						<div class="col-md-4">		
 						  <div class="form-group">
 							  <label class="col-lg-12 col-sm-3 control-label">Amount Balance
 								<span class="required">*</span>
@@ -229,16 +239,39 @@
 			var $productFields=$('.order_product option:selected').data('productfields');
 			var $orderId=$('.order_id').val();
 			getCustonFields($productFields,$orderId);
+			
+			$(document).on('change','.order_product',function(){
+				var $productFields=$('.order_product option:selected').data('productfields');
+				var $orderId=$('.order_id').val();
+				getCustonFields($productFields,$orderId);
+			});
+			
+			$(document).on('change','.order_custom_field,.order_product,.order_quantity,.order_amount_paid,.order_amount',function(){
+				calcBalance();
+				estimate();
+			});
+			
+			$(document).on('change','.order_discount',function(){
+				if($(this).val()==''){
+					$(this).val(0);
+				}
+				if(parseInt($(this).val())>parseInt($('.order_amount').val())){
+					$(this).val(0);
+				}
+				calcBalance();
+				estimate();
+			});
+			
+			$(document).on('change','input[name="order_date"]',function(){
+				$('#orderform').formValidation('revalidateField', 'order_date');
+			});
+			
+			$(document).on('change','input[name="order_delivery_date"]',function(){
+				$('#orderform').formValidation('revalidateField', 'order_delivery_date');
+			});
+    
 		});
-		$(document).on('change','.order_product',function(){
-			var $productFields=$('.order_product option:selected').data('productfields');
-			var $orderId=$('.order_id').val();
-			getCustonFields($productFields,$orderId);
-		});
-		$(document).on('change','.order_custom_field,.order_product,.order_quantity,.order_amount_paid,.order_amount',function(){
-			calcBalance();
-			estimate();
-		});
+		
 		function getCustonFields($productFields,$orderId){
 			if($productFields){
 				$.ajax({
@@ -265,6 +298,7 @@
 				var $html="";
 				var $total=0;
 				var $quantity=parseInt(($('.order_quantity').val() ? $('.order_quantity').val() : 1));
+				var $discount=parseInt(($('.order_discount').val() ? $('.order_discount').val() : 0));
 				$('.custom_field_dropdown').each(function(indx,elem){
 					var $price=$(elem).find('option:selected').data('price');
 					var $label=$(elem).data('fieldlabel');
@@ -296,13 +330,21 @@
 						$total+=parseFloat($price);
 					}
 				});
-				$total=$quantity*$total;
+				$total=($quantity*$total)-$discount;
 				$html+='<div class="row">';
 				$html+='<div class="col-lg-10">';
 				$html+='<strong>Quantity</strong>';
 				$html+='</div>';
 				$html+='<div class="col-lg-2 text-right">';
 				$html+='<strong>x '+$quantity+'</strong>';
+				$html+='</div>';
+				$html+='</div>';
+				$html+='<div class="row">';
+				$html+='<div class="col-lg-10">';
+				$html+='<strong>Discount</strong>';
+				$html+='</div>';
+				$html+='<div class="col-lg-2 text-right">';
+				$html+='<strong>- &#8377; '+$discount+'</strong>';
 				$html+='</div>';
 				$html+='</div>';
 				$html+='<div class="row">';
@@ -324,7 +366,7 @@
 		function calcBalance(){
 			var $total=parseFloat($('.order_amount').val());
 			var $totalPaid=parseFloat($('.order_amount_paid').val());
-			$('.order_amount_balance').val($total-$totalPaid);
+			$('.order_amount_balance').val(($total)-$totalPaid);
 		}
 	  </script>
   <!-- End Page -->
